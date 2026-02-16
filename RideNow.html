@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RideNow | Vehicle Rental</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="RideNow.css">
+    <script src="RideNow.js"></script>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container nav-container">
+            <h1 class="logo">RideNow</h1>
+            <nav>
+                <ul>
+                    <li><a href="#vehicles">Vehicles</a></li>
+                    <li><a href="#shops">Shops</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><button class="login-btn">Login</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Rent Vehicles at Best Prices</h2>
+            <p>Find bikes, cars, scooters & premium vehicles near you.</p>
+            <a href="#vehicles" class="btn">Browse Vehicles</a>
+        </div>
+    </section>
+
+    <!-- SEARCH SECTION -->
+    <section class="search-section">
+        <h2>Search Vehicles</h2>
+        <div class="search-box">
+            <input type="text" id="location" placeholder="Enter Location">
+            <input type="text" id="type" placeholder="Vehicle Type (Car, Bike...)">
+            <button onclick="searchVehicle()">Search</button>
+        </div>
+        <p id="searchResult"></p>
+    </section>
+
+    <!-- VEHICLE SECTION -->
+    <section id="vehicles" class="vehicles">
+        <h2>Available Vehicles</h2>
+        <div class="card-container">
+
+            <div class="card" data-type="car">
+                <img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023" alt="Car">
+                <h3>Hyundai Creta</h3>
+                <p>SUV • Automatic</p>
+                <h4>₹1800/day</h4>
+                <button>Pre-Book</button>
+            </div>
+
+            <div class="card" data-type="bike">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoL2K4gl4Vh24Oht-VpGrNJV_i75WBwtP3gw&s" alt="Bike">
+                <h3>Royal Enfield 350</h3>
+                <p>Motorcycle • Manual</p>
+                <h4>₹900/day</h4>
+                <button>Pre-Book</button>
+            </div>
+
+            <div class="card" data-type="scooter">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSXYDFVgMkpua8ZxSQmshxcrSHsP63WjFjUQ&s" alt="Scooter">
+                <h3>Honda Activa 6G</h3>
+                <p>Scooter • Automatic</p>
+                <h4>₹500/day</h4>
+                <button>Pre-Book</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SHOPS SECTION -->
+    <section id="shops" class="shops">
+        <h2>Nearby Rental Shops</h2>
+        <div class="shop-container">
+            <div class="shop-card">
+                <h3>SpeedRide Rentals</h3>
+                <p>MG Road, Bengaluru</p>
+            </div>
+            <div class="shop-card">
+                <h3>Urban Wheels</h3>
+                <p>Andheri, Mumbai</p>
+            </div>
+            <div class="shop-card">
+                <h3>CityDrive Rentals</h3>
+                <p>Connaught Place, Delhi</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 RideNow. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
