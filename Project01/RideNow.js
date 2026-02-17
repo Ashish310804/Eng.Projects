@@ -1,6 +1,6 @@
 function searchVehicle() {
     let typeInput = document.getElementById("type").value.toLowerCase();
-    let cards = document.querySelectorAll(".card");
+    let cards = document.querySelectorAll(".vehicle-card");
     let resultText = document.getElementById("searchResult");
 
     let found = false;
