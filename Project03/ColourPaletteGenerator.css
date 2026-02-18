@@ -1,0 +1,19 @@
+.color-box {
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.color-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+.color {
+  height: 150px;
+}
+
+.hex-value {
+  font-weight: 600;
+}
