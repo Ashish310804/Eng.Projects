@@ -13,9 +13,10 @@ transactionFormEl.addEventListener("submit", addTransaction);
 function addTransaction(e) {
   e.preventDefault();
 
-  // get form values
   const description = descriptionEl.value.trim();
   const amount = parseFloat(amountEl.value);
+
+  if (!description || isNaN(amount)) return;
 
   transactions.push({
     id: Date.now(),
@@ -37,41 +38,40 @@ function updateTransactionList() {
   const sortedTransactions = [...transactions].reverse();
 
   sortedTransactions.forEach((transaction) => {
-    const transactionEl = createTransactionElement(transaction);
-    transactionListEl.appendChild(transactionEl);
+    const li = document.createElement("li");
+
+    li.classList.add("list-group-item");
+    li.classList.add(
+      transaction.amount > 0
+        ? "transaction-income"
+        : "transaction-expense"
+    );
+
+    li.innerHTML = `
+      <span>${transaction.description}</span>
+      <span>
+        ${formatCurrency(transaction.amount)}
+        <button class="delete-btn ms-2" onclick="removeTransaction(${transaction.id})">
+          ×
+        </button>
+      </span>
+    `;
+
+    transactionListEl.appendChild(li);
   });
 }
 
-function createTransactionElement(transaction) {
-  const li = document.createElement("li");
-  li.classList.add("transaction");
-  li.classList.add(transaction.amount > 0 ? "income" : "expense");
-
-  li.innerHTML = `
-    <span>${transaction.description}</span>
-    <span>
-  
-    ${formatCurrency(transaction.amount)}
-      <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
-    </span>
-  `;
-
-  return li;
-}
-
 function updateSummary() {
-  // 100, -50, 200, -200 => 50
-  const balance = transactions.reduce((acc, transaction) => acc + transaction.amount, 0);
+  const balance = transactions.reduce((acc, t) => acc + t.amount, 0);
 
   const income = transactions
-    .filter((transaction) => transaction.amount > 0)
-    .reduce((acc, transaction) => acc + transaction.amount, 0);
+    .filter((t) => t.amount > 0)
+    .reduce((acc, t) => acc + t.amount, 0);
 
   const expenses = transactions
-    .filter((transaction) => transaction.amount < 0)
-    .reduce((acc, transaction) => acc + transaction.amount, 0);
+    .filter((t) => t.amount < 0)
+    .reduce((acc, t) => acc + t.amount, 0);
 
-  // update ui => todo: fix the formatting
   balanceEl.textContent = formatCurrency(balance);
   incomeAmountEl.textContent = formatCurrency(income);
   expenseAmountEl.textContent = formatCurrency(expenses);
@@ -85,15 +85,13 @@ function formatCurrency(number) {
 }
 
 function removeTransaction(id) {
-  // filter out the one we wanted to delete
-  transactions = transactions.filter((transaction) => transaction.id !== id);
+  transactions = transactions.filter((t) => t.id !== id);
 
-  localStorage.setItem("transcations", JSON.stringify(transactions));
+  localStorage.setItem("transactions", JSON.stringify(transactions));
 
   updateTransactionList();
   updateSummary();
 }
 
-// initial render
 updateTransactionList();
 updateSummary();
