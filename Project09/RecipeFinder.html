@@ -2,37 +2,64 @@
 <html>
   <head>
     <title>Recipe Finder App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="RecipeFinder.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1><i class="fas fa-utensils"></i> Recipe Finder</h1>
-        <p>Find delicious recipes from around the world</p>
-      </header>
+<body class="bg-light">
 
-      <p class="api-link">Data from <a href="https://www.themealdb.com/api.php">TheMealDB 🧑‍🍳</a></p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-danger shadow">
+      <div class="container">
+        <span class="navbar-brand mb-0 h1">
+          <i class="fas fa-utensils me-2"></i>Recipe Finder
+        </span>
+      </div>
+    </nav>
 
-      <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search for meals or keywords" />
-        <button id="search-btn">Search</button>
+    <div class="container py-5">
+
+      <!-- Search Section -->
+      <div class="text-center mb-4">
+        <h2 class="fw-bold">Find Delicious Recipes 🍽️</h2>
+        <p class="text-muted">Search meals from around the world</p>
       </div>
 
-      <div id="error-container" class="hidden">
-        <p>No meals found. Try another search term!</p>
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+          <div class="input-group shadow">
+            <input
+              type="text"
+              id="search-input"
+              class="form-control"
+              placeholder="Search for meals..."
+            />
+            <button id="search-btn" class="btn btn-danger">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div id="result-heading"></div>
+      <div id="error-container" class="alert alert-danger text-center d-none"></div>
 
-      <div id="meals" class="meals-container"></div>
+      <h5 id="result-heading" class="text-center mb-4"></h5>
 
-      <div id="meal-details" class="hidden">
-        <button id="back-btn"><i class="fas fa-arrow-left"></i> Back to recipes</button>
+      <!-- Meals Grid -->
+      <div id="meals" class="row g-4"></div>
 
-        <div class="meal-details-content"></div>
+      <!-- Meal Details -->
+      <div id="meal-details" class="mt-5 d-none">
+        <button id="back-btn" class="btn btn-outline-danger mb-4">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <div class="meal-details-content card shadow p-4"></div>
       </div>
+
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="RecipeFinder.js"></script>
   </body>
