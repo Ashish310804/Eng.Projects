@@ -137,11 +137,8 @@ function selectAnswer(event) {
 function showResults() {
   quizScreen.classList.remove("active");
   resultScreen.classList.add("active");
-
   finalScoreSpan.textContent = score;
-
   const percentage = (score / quizQuestions.length) * 100;
-
   if (percentage === 100) {
     resultMessage.textContent = "Perfect! You're a genius!";
   } else if (percentage >= 80) {
