@@ -85,9 +85,7 @@ function startQuiz() {
 function showQuestion() {
   // reset state
   answersDisabled = false;
-
   const currentQuestion = quizQuestions[currentQuestionIndex];
-
   currentQuestionSpan.textContent = currentQuestionIndex + 1;
 
   const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
