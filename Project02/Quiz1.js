@@ -118,12 +118,10 @@ function selectAnswer(event) {
       button.classList.add("incorrect");
     }
   });
-
   if (isCorrect) {
     score++;
     scoreSpan.textContent = score;
   }
-
   setTimeout(() => {
     currentQuestionIndex++;
 
