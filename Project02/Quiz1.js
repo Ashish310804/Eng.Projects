@@ -83,6 +83,7 @@ function startQuiz() {
 }
 
 function showQuestion() {
+
   // reset state
   answersDisabled = false;
   const currentQuestion = quizQuestions[currentQuestionIndex];
@@ -104,6 +105,7 @@ function showQuestion() {
 }
 
 function selectAnswer(event) {
+  
   // optimization check
   if (answersDisabled) return;
   answersDisabled = true;
