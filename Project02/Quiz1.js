@@ -98,6 +98,7 @@ function showQuestion() {
 
     // what is dataset? it's a property of the button element that allows you to store custom data
     button.dataset.correct = answer.correct;
+    
     button.addEventListener("click", selectAnswer);
     answersContainer.appendChild(button);
   });
