@@ -107,6 +107,7 @@ function selectAnswer(event) {
 
   // optimization check
   if (answersDisabled) return;
+  
   answersDisabled = true;
   const selectedButton = event.target;
   const isCorrect = selectedButton.dataset.correct === "true";
