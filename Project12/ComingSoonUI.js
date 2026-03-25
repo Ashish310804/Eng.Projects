@@ -18,7 +18,7 @@ function updateCountdown() {
   if (diff <= 0) {
      daysEl.textContent = "00";
      hoursEl.textContent = "00";
-    minutesEl.textContent = "00";
+     minutesEl.textContent = "00";
     secondsEl.textContent = "00";
     return;
   }
