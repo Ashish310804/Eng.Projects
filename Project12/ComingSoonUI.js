@@ -48,7 +48,7 @@ emailForm.addEventListener("submit", (e) => {
   button.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i>";
   button.disabled = true;
 
-  // simulate an api call
+     // simulate an api call
   setTimeout(() => {
     emailForm.classList.add("hidden");
     successMessage.classList.remove("hidden");
