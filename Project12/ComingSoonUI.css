@@ -24,7 +24,6 @@ body {
   overflow: hidden;
 }
 
-/* TODO: EXPLAIN THIS LATER */
 .bg {
   position: absolute;
   inset: 0;
