@@ -41,7 +41,7 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 
 emailForm.addEventListener("submit", (e) => {
-  e.preventDefault(); // this will make sure to not reaload the page
+  e.preventDefault();             // this will make sure to not reaload the page
 
   const button = emailForm.querySelector("button");
 
