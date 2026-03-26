@@ -3,7 +3,7 @@ const successState = document.getElementById("success");
 const resetBtn = document.getElementById("reset-btn");
 
 form.addEventListener("submit", (e) => {
-  e.preventDefault(); // this will prevent reloading the page
+  e.preventDefault();    // this will prevent reloading the page
 
   const submitBtn = form.querySelector(".submit-btn");
 
