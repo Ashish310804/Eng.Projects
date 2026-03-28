@@ -3,361 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GasMap | Smart LPG Monitoring</title>
+    <title>GASMAP | Enterprise LPG Management</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --primary: #FF0000;
-            --accent: #FFD700;
-            --bg-dark: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --text-main: #ffffff;
-            --text-dim: #b3b3b3;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            --secondary: #FFD700;
+            --dark-bg: #080808;
+            --surface: #121212;
+            --text-muted: #888;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #200000 100%);
-            color: var(--text-main);
-            line-height: 1.6;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* --- Navigation --- */
-        nav {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--primary);
+        h1, h2, h3, .navbar-brand { font-family: 'Syncopate', sans-serif; text-transform: uppercase; }
+
+        /* --- Scroll Progress Bar --- */
+        #scrollProgress {
+            position: fixed; top: 0; left: 0; height: 4px; background: var(--primary);
+            width: 0%; z-index: 9999; transition: width 0.1s;
+        }
+
+        /* --- Custom Navbar --- */
+        .navbar {
+            background: rgba(8, 8, 8, 0.95);
             backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+            padding: 1.5rem 0;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-transform: uppercase;
+        .nav-link {
+            color: #fff !important;
+            font-size: 0.8rem;
             letter-spacing: 2px;
+            transition: var(--transition-smooth);
+            border-bottom: 2px solid transparent;
         }
 
-        .nav-links {
+        .nav-link:hover { color: var(--primary) !important; border-bottom: 2px solid var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
             display: flex;
-            gap: 2rem;
+            align-items: center;
+            background: radial-gradient(circle at center, #200000 0%, #080808 100%);
+            position: relative;
         }
 
-        .nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
+        .hero-glow {
+            position: absolute; width: 400px; height: 400px; background: var(--primary);
+            filter: blur(150px); opacity: 0.15; top: 20%; left: 10%; z-index: 0;
         }
 
-        .nav-links a:hover {
-            color: var(--accent);
-            transform: translateY(-2px);
+        /* --- Cards & Panels --- */
+        .glass-card {
+            background: var(--surface);
+            border: 1px solid #222;
+            border-radius: 0;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* --- Main Layout --- */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid #333;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            transform: scale(1.02);
+        .glass-card:hover {
             border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.1);
         }
 
-        h2 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .metric-value { font-size: 4rem; font-weight: 700; color: var(--primary); }
+
+        /* --- Chat Interface --- */
+        #chat-trigger {
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            background: var(--primary); border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; z-index: 1000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
         }
 
-        /* --- Gauge & Metrics --- */
-        .status-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        /* --- Custom Inputs --- */
+        .form-control {
+            background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 0;
         }
+        .form-control:focus { background: #222; border-color: var(--primary); color: #fff; box-shadow: none; }
 
-        .metric {
-            text-align: center;
-            padding: 1rem;
-            background: #252525;
-            border-radius: 10px;
-        }
-
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        /* --- Input Form --- */
-        .input-group {
-            margin-bottom: 1rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #252525;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 8px;
-            margin-top: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        button:hover {
-            background: #cc0000;
-            filter: brightness(1.2);
-        }
-
-        /* --- Chatbox --- */
-        #chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            background: var(--card-bg);
-            border: 2px solid var(--primary);
-            border-radius: 15px;
-            display: none;
-            flex-direction: column;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-
-        #chat-messages {
-            height: 250px;
-            overflow-y: auto;
-            padding: 10px;
-            font-size: 0.9rem;
-        }
-
-        .bot-msg { color: var(--accent); margin-bottom: 8px; }
-        .user-msg { color: #fff; text-align: right; margin-bottom: 8px; }
-
-        .chat-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 999;
-        }
-
-        /* --- Responsive Design --- */
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .container { grid-template-columns: 1fr; }
-        }
+        section { padding: 100px 0; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo"><i class="fas fa-fire"></i> GasMap</div>
-        <div class="nav-links">
-            <a href="#dashboard">Dashboard</a>
-            <a href="#usage">Analytics</a>
-            <a href="#guide">Safety Guide</a>
-            <a href="#manual">Manual Entry</a>
-        </div>
-    </nav>
+<div id="scrollProgress"></div>
 
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <div class="card" id="dashboard">
-            <h2><i class="fas fa-tachometer-alt"></i> Live Pressure</h2>
-            <div class="status-grid">
-                <div class="metric">
-                    <p>Current PSI</p>
-                    <div class="metric-value" id="psi-display">120</div>
-                </div>
-                <div class="metric">
-                    <p>Remaining</p>
-                    <div class="metric-value" id="perc-display">85%</div>
-                </div>
-            </div>
-            <div style="margin-top: 20px;">
-                <p><i class="fas fa-clock"></i> Est. Continuous Usage: <span id="time-left" style="color:var(--accent)">42 Hours</span></p>
-                <p><i class="fas fa-calendar-alt"></i> Predicted End: <span id="end-date" style="color:var(--accent)">Oct 12, 2023</span></p>
-            </div>
-        </div>
-
-        <div class="card" id="usage">
-            <h2><i class="fas fa-chart-line"></i> Daily Usage Trend</h2>
-            <canvas id="usageChart"></canvas>
-        </div>
-
-        <div class="card" id="manual">
-            <h2><i class="fas fa-edit"></i> Update Cylinder Data</h2>
-            <div class="input-group">
-                <label>Current Pressure (PSI)</label>
-                <input type="number" id="manual-psi" placeholder="Enter PSI value...">
-            </div>
-            <div class="input-group">
-                <label>Last Refill Date</label>
-                <input type="date" id="refill-date">
-            </div>
-            <button onclick="updateData()">Update Dashboard</button>
-        </div>
-
-        <div class="card" id="guide">
-            <h2><i class="fas fa-shield-alt"></i> Management Guide</h2>
-            <ul style="list-style: none; color: var(--text-dim); font-size: 0.9rem;">
-                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Check regulator seals every 3 months.</li>
-                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> If pressure drops >10 PSI instantly, check for leaks.</li>
-                <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Keep cylinder in vertical position at all times.</li>
+        <a class="navbar-brand text-danger fw-bold" href="#">GASMAP</a>
+        <button class="navbar-toggler border-danger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="fas fa-bars text-danger"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#telemetry">Live Telemetry</a></li>
+                <li class="nav-item"><a class="nav-link" href="#analytics">Usage Analytics</a></li>
+                <li class="nav-item"><a class="nav-link" href="#management">Manual Sync</a></li>
+                <li class="nav-item"><a class="nav-link" href="#docs">Safety Docs</a></li>
+                <li class="nav-item ms-lg-4"><a class="btn btn-outline-danger px-4" href="#">API LOGIN</a></li>
             </ul>
         </div>
     </div>
+</nav>
 
-    <div class="chat-toggle" onclick="toggleChat()"><i class="fas fa-comment-dots"></i></div>
-    <div id="chat-container">
-        <div style="background: var(--primary); padding: 10px; font-weight: bold; border-radius: 12px 12px 0 0;">GasMap Assistant</div>
-        <div id="chat-messages">
-            <div class="bot-msg">Hello! How can I help you with your LPG status today?</div>
-        </div>
-        <div style="padding: 10px; border-top: 1px solid #333;">
-            <input type="text" id="chat-input" placeholder="Type a question..." style="margin: 0; padding: 8px;">
+<section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container position-relative" style="z-index: 1;">
+        <div class="row align-items-center">
+            <div class="col-lg-7" data-aos="fade-right">
+                <h6 class="text-danger mb-3 tracking-widest">INDUSTRIAL LPG MONITORING</h6>
+                <h1 class="display-2 fw-bold mb-4">Precision <br><span class="text-warning">Pressure</span> Logic</h1>
+                <p class="lead text-secondary mb-5">Next-gen IoT integration for real-time LPG cylinder monitoring. High-frequency data sampling with predictive depletion algorithms.</p>
+                <div class="d-flex gap-3">
+                    <a href="#telemetry" class="btn btn-danger btn-lg px-5 py-3 rounded-0">VIEW TERMINAL</a>
+                    <a href="#docs" class="btn btn-outline-light btn-lg px-5 py-3 rounded-0">DOCUMENTATION</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block" data-aos="zoom-in">
+                <i class="fas fa-microchip text-danger" style="font-size: 15rem; opacity: 0.2; filter: drop-shadow(0 0 50px red);"></i>
+            </div>
         </div>
     </div>
+</section>
 
-    <script>
-        // --- Initialization ---
-        let currentPsi = 120;
-        const maxPsi = 150;
+<section id="telemetry" class="bg-black">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="mb-3">Live Sensor Data</h2>
+            <div class="bg-danger mx-auto" style="width: 50px; height: 3px;"></div>
+        </div>
 
-        // --- Chart Config ---
-        const ctx = document.getElementById('usageChart').getContext('2d');
-        const usageChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Usage (PSI Drop)',
-                    data: [12, 19, 15, 8, 22, 30, 10],
-                    borderColor: '#FF0000',
-                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { labels: { color: '#fff' } } },
-                scales: {
-                    y: { ticks: { color: '#b3b3b3' }, grid: { color: '#333' } },
-                    x: { ticks: { color: '#b3b3b3' }, grid: { color: '#333' } }
-                }
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card p-5 text-center">
+                    <p class="text-muted small uppercase">Current PSI</p>
+                    <div id="psiValue" class="metric-value">134.2</div>
+                    <p class="text-warning"><i class="fas fa-bolt"></i> Real-time Feed</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card p-5 text-center">
+                    <p class="text-muted small uppercase">Remaining Payload</p>
+                    <div id="percValue" class="metric-value text-white">89%</div>
+                    <div class="progress bg-dark mt-3" style="height: 5px;">
+                        <div id="percBar" class="progress-bar bg-danger" style="width: 89%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass-card p-5 text-center">
+                    <p class="text-muted small uppercase">Est. Depletion</p>
+                    <div id="daysValue" class="metric-value" style="color: var(--secondary);">42</div>
+                    <p class="text-muted">Calculated Days Remaining</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="analytics">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8" data-aos="fade-right">
+                <div class="glass-card p-4">
+                    <h5 class="mb-4">Consumption Flow Analysis</h5>
+                    <canvas id="consumptionChart" height="300"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="fade-left">
+                <div class="glass-card p-4 h-100">
+                    <h5 class="mb-4 text-danger">Event Logs</h5>
+                    <div id="logConsole" class="small mono text-muted" style="height: 350px; overflow-y: auto;">
+                        <div class="mb-2 border-bottom border-dark pb-1">[09:22:01] System Handshake OK</div>
+                        <div class="mb-2 border-bottom border-dark pb-1">[10:45:12] High Pressure Flow Detected</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="management" class="bg-black">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6" data-aos="flip-up">
+                <div class="glass-card p-5 border-danger">
+                    <h3 class="mb-4 text-center">Hardware Override</h3>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Calibration Value (PSI)</label>
+                        <input type="number" id="manualPSI" class="form-control form-control-lg" placeholder="0.00">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-muted">Refill Batch ID</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="GAS-XXXX-2026">
+                    </div>
+                    <button onclick="updateSystem()" class="btn btn-danger w-100 py-3 fw-bold">FORCE SYNC DATA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="docs">
+    <div class="container">
+        <h2 class="text-center mb-5" data-aos="fade-down">Safety & Management Protocols</h2>
+        <div class="accordion accordion-flush" id="safetyAccordion">
+            <div class="accordion-item bg-transparent border-bottom border-dark" data-aos="fade-up">
+                <h2 class="accordion-header">
+                    <button class="accordion-button bg-transparent text-white collapsed" data-bs-toggle="collapse" data-bs-target="#q1">
+                        How to identify a pressure regulator failure?
+                    </button>
+                </h2>
+                <div id="q1" class="accordion-collapse collapse" data-bs-parent="#safetyAccordion">
+                    <div class="accordion-body text-secondary">
+                        If the GASMAP sensor reports rapid PSI fluctuations exceeding 15% within a 60-second window during zero usage, immediately shut off the main valve.
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</section>
+
+<div id="chat-trigger" onclick="toggleChat()">
+    <i class="fas fa-headset fa-lg"></i>
+</div>
+
+<div id="chat-panel" class="glass-card shadow-lg" style="position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; display: none; z-index: 1000; border-radius: 15px;">
+    <div class="p-3 bg-danger text-black fw-bold d-flex justify-content-between">
+        <span>GASMAP_CORE AI</span>
+        <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
+    </div>
+    <div id="chat-body" class="p-3 overflow-y-auto h-75 small">
+        <div class="mb-3 text-warning">System online. Waiting for query...</div>
+    </div>
+    <div class="p-3 border-top border-dark">
+        <input type="text" id="chatInput" class="form-control" placeholder="Ask about safety..." onkeyup="if(event.key==='Enter') sendMessage()">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Initialize Animations
+    AOS.init({ duration: 1000, once: false });
+
+    // Scroll Progress
+    window.onscroll = function() {
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("scrollProgress").style.width = scrolled + "%";
+    };
+
+    // Chart.js Configuration
+    const ctx = document.getElementById('consumptionChart').getContext('2d');
+    let gasChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+            datasets: [{
+                label: 'Flow Velocity (PSI/min)',
+                data: [12, 19, 3, 5, 2, 3, 10, 7],
+                borderColor: '#FF0000',
+                backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#222' }, ticks: { color: '#555' } },
+                x: { grid: { color: '#222' }, ticks: { color: '#555' } }
             }
-        });
-
-        // --- Core Functions ---
-        function updateData() {
-            const inputVal = document.getElementById('manual-psi').value;
-            if(!inputVal) return alert("Please enter a value");
-            
-            currentPsi = inputVal;
-            const percentage = Math.round((currentPsi / maxPsi) * 100);
-            
-            // Update UI
-            document.getElementById('psi-display').innerText = currentPsi;
-            document.getElementById('perc-display').innerText = percentage + "%";
-            
-            // Calculate Logic
-            const hoursLeft = Math.floor(currentPsi * 0.35); // Hypothetical burn rate
-            document.getElementById('time-left').innerText = hoursLeft + " Hours";
-            
-            // Add to chart
-            usageChart.data.datasets[0].data.shift();
-            usageChart.data.datasets[0].data.push(Math.random() * 20);
-            usageChart.update();
         }
+    });
 
-        // --- Chatbox Logic ---
-        function toggleChat() {
-            const chat = document.getElementById('chat-container');
-            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
-        }
+    // Core Dashboard Logic
+    function updateSystem() {
+        const val = document.getElementById('manualPSI').value;
+        if(!val) return;
+        
+        // Dynamic UI Updates
+        document.getElementById('psiValue').innerText = val;
+        let perc = Math.round((val / 150) * 100);
+        document.getElementById('percValue').innerText = perc + "%";
+        document.getElementById('percBar').style.width = perc + "%";
+        document.getElementById('daysValue').innerText = Math.floor(val * 0.4);
 
-        document.getElementById('chat-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                const msg = this.value;
-                const container = document.getElementById('chat-messages');
-                
-                container.innerHTML += `<div class="user-msg">${msg}</div>`;
-                
-                // Simple Bot Logic
-                setTimeout(() => {
-                    let response = "I'm not sure about that. Try checking your PSI levels!";
-                    if(msg.toLowerCase().includes("leak")) response = "DANGER: Close the regulator and open all windows immediately!";
-                    if(msg.toLowerCase().includes("status")) response = `Your current pressure is ${currentPsi} PSI.`;
-                    
-                    container.innerHTML += `<div class="bot-msg">${response}</div>`;
-                    container.scrollTop = container.scrollHeight;
-                }, 600);
-                
-                this.value = '';
-            }
-        });
+        // Logging
+        const log = document.getElementById('logConsole');
+        log.innerHTML = `<div class="mb-2 text-danger">[${new Date().toLocaleTimeString()}] MANUAL OVERRIDE: ${val} PSI</div>` + log.innerHTML;
+    }
 
-        // Simulated Real-time fluctuation
-        setInterval(() => {
-            let wiggle = (Math.random() * 0.5 - 0.25).toFixed(2);
-            document.getElementById('psi-display').innerText = (parseFloat(currentPsi) + parseFloat(wiggle)).toFixed(1);
-        }, 3000);
-    </script>
+    // Chat Logic
+    function toggleChat() {
+        const panel = document.getElementById('chat-panel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const body = document.getElementById('chat-body');
+        if(!input.value) return;
+
+        body.innerHTML += `<div class="text-end mb-2 text-white">${input.value}</div>`;
+        
+        // Mock AI Response
+        setTimeout(() => {
+            body.innerHTML += `<div class="text-start mb-2 text-danger">Analyzing telemetry... Query processed successfully.</div>`;
+            body.scrollTop = body.scrollHeight;
+        }, 800);
+        
+        input.value = '';
+    }
+</script>
+
 </body>
 </html>
