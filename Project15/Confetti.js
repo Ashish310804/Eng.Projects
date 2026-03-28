@@ -9,7 +9,6 @@ form.addEventListener("submit", (e) => {
   formCard.classList.add("hidden");
   successCard.classList.remove("hidden");
 
-  // fire confetti! this is the one in the middle
   confetti({
     particleCount: 100,
     spread: 70,
