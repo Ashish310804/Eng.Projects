@@ -17,7 +17,6 @@ form.addEventListener("submit", (e) => {
   });
 
   setTimeout(() => {
-    // left
     confetti({
       particleCount: 50,
       angle: 60,
