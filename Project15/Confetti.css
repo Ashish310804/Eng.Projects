@@ -83,7 +83,7 @@ button {
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  transition: bg 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 button:hover {
