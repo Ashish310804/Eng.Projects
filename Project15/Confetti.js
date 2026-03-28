@@ -4,6 +4,7 @@ const successCard = document.getElementById("successCard");
 const resetBtn = document.getElementById("resetBtn");
 
 form.addEventListener("submit", (e) => {
+    
   e.preventDefault(); // this will prevent page reload
 
   formCard.classList.add("hidden");
@@ -31,7 +32,7 @@ form.addEventListener("submit", (e) => {
       spread: 55,
       origin: { x: 1 },
     });
-    
+
   }, 200);
 });
 
