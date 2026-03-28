@@ -24,7 +24,6 @@ form.addEventListener("submit", (e) => {
       origin: { x: 0 },
     });
 
-    // right
     confetti({
       particleCount: 50,
       angle: 120,
