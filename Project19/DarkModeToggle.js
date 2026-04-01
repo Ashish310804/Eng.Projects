@@ -5,9 +5,7 @@ toggleBtn.addEventListener("click", () => {
   console.log("this part run");
   const currentTheme = html.getAttribute("data-theme");          // light or dark
   const newTheme = currentTheme === "dark" ? "light" : "dark";
-
   html.setAttribute("data-theme", newTheme);
-
   localStorage.setItem("theme", newTheme);
 });
 
