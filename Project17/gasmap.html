@@ -100,7 +100,19 @@
         }
         .form-control:focus { background: #222; border-color: var(--primary); color: #fff; box-shadow: none; }
 
-        section { padding: 100px 0; }
+        /* --- Daily Logs Table --- */
+        .logs-table {
+            background: var(--surface);
+            border: 1px solid #222;
+            border-radius: 0;
+        }
+        .logs-table th, .logs-table td {
+            border: 1px solid #333;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .logs-table th { background: var(--dark-bg); color: var(--primary); }
+        .logs-table tbody tr:hover { background: rgba(255, 0, 0, 0.05); }
     </style>
 </head>
 <body>
