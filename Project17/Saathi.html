@@ -1048,12 +1048,15 @@
       } catch (error) {
         console.error('Failed to load readings:', error);
         // Fallback to localStorage or defaults
-        appState.readings = (JSON.parse(localStorage.getItem('readings')) || [
-          { pressure: 12.00, date: new Date(Date.now() - 14 * 60000) },
-          { pressure: 14.00, date: new Date(Date.now() - 1440 * 60000) },
-          { pressure: 14.10, date: new Date(Date.now() - 1440 * 60000) },
-          { pressure: 12.90, date: new Date(Date.now() - 2880 * 60000) }
-        ]).map(r => ({ ...r, date: new Date(r.date) }));
+        const saved = localStorage.getItem(appState.storageKey);
+      const backupReadings = [
+        { pressure: 12.00, date: new Date(Date.now() - 14 * 60000) },
+        { pressure: 14.00, date: new Date(Date.now() - 1440 * 60000) },
+        { pressure: 14.10, date: new Date(Date.now() - 1440 * 60000) },
+        { pressure: 12.90, date: new Date(Date.now() - 2880 * 60000) }
+      ];
+      const fallback = saved ? JSON.parse(saved).readings || backupReadings : backupReadings;
+      appState.readings = fallback.map(r => ({ ...r, date: new Date(r.date) }));
       }
     }
 
