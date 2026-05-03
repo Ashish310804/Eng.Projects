@@ -394,6 +394,25 @@
       border-color: #dfe3ee;
     }
 
+    .history-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .history-item .edit-btn {
+      cursor: pointer;
+      color: #2c9b65;
+      transition: color 0.2s ease, transform 0.2s ease;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .history-item .edit-btn:hover {
+      color: #1f7a4d;
+      transform: scale(1.1);
+    }
+
     .history-item .delete-btn {
       cursor: pointer;
       color: #ef2b2b;
@@ -406,6 +425,28 @@
       color: #c41616;
       transform: scale(1.2) rotate(90deg);
       text-shadow: 0 2px 4px rgba(239, 43, 43, 0.2);
+    }
+
+    .history-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .history-controls button {
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      color: #666;
+    }
+
+    .history-controls button:hover {
+      background: #f0f0f0;
+      border-color: #bbb;
+      transform: scale(1.05);
     }
 
     svg {
@@ -1037,12 +1078,43 @@
       </section>
 
       <section>
-        <div class="section-title">History <span>4 entries</span></div>
+        <div class="section-title">
+          History <span>4 entries</span>
+          <div class="history-controls">
+            <button onclick="toggleHistorySort()" title="Sort by date/pressure">🔄</button>
+            <button onclick="exportHistory()" title="Export history">📤</button>
+            <button onclick="clearHistory()" title="Clear all history">🗑️</button>
+          </div>
+        </div>
         <div class="content history-box" id="history">
-          <div class="history-item"><div><b>12.00 bar</b><br /><small>Apr 24, 10:50 AM</small></div><span>×</span></div>
-          <div class="history-item"><div><b>14.00 bar</b><br /><small>Apr 23, 10:49 AM</small></div><span>×</span></div>
-          <div class="history-item"><div><b>14.10 bar</b><br /><small>Apr 23, 10:49 AM</small></div><span>×</span></div>
-          <div class="history-item"><div><b>12.90 bar</b><br /><small>Apr 22, 10:50 AM</small></div><span>×</span></div>
+          <div class="history-item">
+            <div><b>12.00 bar</b><br /><small>Apr 24, 10:50 AM</small></div>
+            <div class="history-actions">
+              <span class="edit-btn" onclick="editReading(this)" title="Edit">✏️</span>
+              <span class="delete-btn" onclick="deleteReading(this)">×</span>
+            </div>
+          </div>
+          <div class="history-item">
+            <div><b>14.00 bar</b><br /><small>Apr 23, 10:49 AM</small></div>
+            <div class="history-actions">
+              <span class="edit-btn" onclick="editReading(this)" title="Edit">✏️</span>
+              <span class="delete-btn" onclick="deleteReading(this)">×</span>
+            </div>
+          </div>
+          <div class="history-item">
+            <div><b>14.10 bar</b><br /><small>Apr 23, 10:49 AM</small></div>
+            <div class="history-actions">
+              <span class="edit-btn" onclick="editReading(this)" title="Edit">✏️</span>
+              <span class="delete-btn" onclick="deleteReading(this)">×</span>
+            </div>
+          </div>
+          <div class="history-item">
+            <div><b>12.90 bar</b><br /><small>Apr 22, 10:50 AM</small></div>
+            <div class="history-actions">
+              <span class="edit-btn" onclick="editReading(this)" title="Edit">✏️</span>
+              <span class="delete-btn" onclick="deleteReading(this)">×</span>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -1310,7 +1382,23 @@
       const history = document.getElementById('history');
       history.innerHTML = '';
 
-      appState.readings.forEach(reading => {
+      // Sort readings based on current sortOrder
+      const sortedReadings = [...appState.readings].sort((a, b) => {
+        switch (sortOrder) {
+          case 'date-desc':
+            return b.date - a.date;
+          case 'date-asc':
+            return a.date - b.date;
+          case 'pressure-desc':
+            return b.pressure - a.pressure;
+          case 'pressure-asc':
+            return a.pressure - b.pressure;
+          default:
+            return 0;
+        }
+      });
+
+      sortedReadings.forEach(reading => {
         const item = document.createElement('div');
         item.className = 'history-item';
         const timeStr = reading.date.toLocaleString('en-US', {
@@ -1322,7 +1410,10 @@
         });
         item.innerHTML = `
           <div><b>${reading.pressure.toFixed(2)} bar</b><br /><small>${timeStr}</small></div>
-          <span class="delete-btn" onclick="deleteReading(this)">×</span>`;
+          <div class="history-actions">
+            <span class="edit-btn" onclick="editReading(this)" title="Edit">✏️</span>
+            <span class="delete-btn" onclick="deleteReading(this)">×</span>
+          </div>`;
         history.appendChild(item);
       });
 
@@ -1712,18 +1803,7 @@
       }
 
       // Add to history
-      const history = document.getElementById('history');
-      const item = document.createElement('div');
-      item.className = 'history-item';
-      const timeStr = date.toLocaleString('en-US', { 
-        month: 'short', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit',
-        meridiem: 'short'
-      });
-      item.innerHTML = `<div><b>${pressure.toFixed(2)} bar</b><br /><small>${timeStr}</small></div><span class="delete-btn" onclick="deleteReading(this)">×</span>`;
-      history.prepend(item);
+      renderHistory();
 
       // Update section title span
       const span = document.querySelector('.history-box').closest('section').querySelector('.section-title span');
@@ -1764,18 +1844,7 @@
       }
 
       // Add to history
-      const history = document.getElementById('history');
-      const item = document.createElement('div');
-      item.className = 'history-item';
-      const timeStr = date.toLocaleString('en-US', { 
-        month: 'short', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit',
-        meridiem: 'short'
-      });
-      item.innerHTML = `<div><b>${pressure.toFixed(2)} bar</b><br /><small>${timeStr}</small></div><span class="delete-btn" onclick="deleteReading(this)">×</span>`;
-      history.prepend(item);
+      renderHistory();
 
       // Update section title span
       const span = document.querySelector('.history-box').closest('section').querySelector('.section-title span');
@@ -1803,10 +1872,180 @@
         }
       }
 
-      item.remove();
-      const span = document.querySelector('.history-box').closest('section').querySelector('.section-title span');
-      if (span) span.innerText = appState.readings.length + ' entries';
+      renderHistory();
       
+      updateGaugeDisplay();
+      generatePressureChart();
+      updateLastReadingDisplay();
+    }
+
+    // Edit Reading
+    function editReading(btn) {
+      const item = btn.closest('.history-item');
+      const pressureElement = item.querySelector('b');
+      const currentPressure = parseFloat(pressureElement.innerText);
+      
+      // Create inline input for editing
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.value = currentPressure.toFixed(2);
+      input.min = '0';
+      input.max = '50';
+      input.step = '0.01';
+      input.style.width = '80px';
+      input.style.fontSize = '14px';
+      input.style.fontWeight = 'bold';
+      input.style.border = '1px solid #ddd';
+      input.style.borderRadius = '4px';
+      input.style.padding = '2px 4px';
+      
+      // Replace pressure text with input
+      pressureElement.parentNode.replaceChild(input, pressureElement);
+      input.focus();
+      input.select();
+      
+      // Handle save/cancel
+      const saveEdit = () => {
+        const newPressure = parseFloat(input.value);
+        if (isNaN(newPressure) || newPressure < 0 || newPressure > 50) {
+          alert('Please enter a valid pressure between 0 and 50 bar.');
+          input.focus();
+          return;
+        }
+        
+        // Find and update the reading in appState
+        const index = appState.readings.findIndex(r => Math.abs(r.pressure - currentPressure) < 0.01);
+        if (index > -1) {
+          appState.readings[index].pressure = newPressure;
+          
+          // Update on server (this would need a PUT endpoint, for now just update locally)
+          try {
+            // Note: This assumes a PUT endpoint exists, you may need to add it to server.js
+            fetch(`/api/readings/${index}`, { 
+              method: 'PUT', 
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ pressure: newPressure })
+            }).catch(error => console.error('Failed to update reading:', error));
+          } catch (error) {
+            console.error('Failed to update reading:', error);
+          }
+        }
+        
+        // Replace input back with text
+        const newPressureElement = document.createElement('b');
+        newPressureElement.innerText = newPressure.toFixed(2) + ' bar';
+        input.parentNode.replaceChild(newPressureElement, input);
+        
+        updateGaugeDisplay();
+        generatePressureChart();
+        updateLastReadingDisplay();
+      };
+      
+      const cancelEdit = () => {
+        // Replace input back with original text
+        const originalPressureElement = document.createElement('b');
+        originalPressureElement.innerText = currentPressure.toFixed(2) + ' bar';
+        input.parentNode.replaceChild(originalPressureElement, input);
+      };
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          saveEdit();
+        } else if (e.key === 'Escape') {
+          cancelEdit();
+        }
+      });
+      
+      input.addEventListener('blur', saveEdit);
+    }
+
+    // Toggle History Sort
+    let sortOrder = 'date-desc'; // date-desc, date-asc, pressure-desc, pressure-asc
+    function toggleHistorySort() {
+      const sortOptions = ['date-desc', 'date-asc', 'pressure-desc', 'pressure-asc'];
+      const currentIndex = sortOptions.indexOf(sortOrder);
+      sortOrder = sortOptions[(currentIndex + 1) % sortOptions.length];
+      
+      // Sort readings based on current sortOrder
+      appState.readings.sort((a, b) => {
+        switch (sortOrder) {
+          case 'date-desc':
+            return b.date - a.date;
+          case 'date-asc':
+            return a.date - b.date;
+          case 'pressure-desc':
+            return b.pressure - a.pressure;
+          case 'pressure-asc':
+            return a.pressure - b.pressure;
+          default:
+            return 0;
+        }
+      });
+      
+      renderHistory();
+    }
+
+    // Export History
+    function exportHistory() {
+      if (appState.readings.length === 0) {
+        alert('No readings to export.');
+        return;
+      }
+      
+      const format = confirm('Export as CSV? (Cancel for JSON)') ? 'csv' : 'json';
+      let content, filename, mimeType;
+      
+      if (format === 'csv') {
+        const headers = 'Date,Pressure (bar)\n';
+        const rows = appState.readings.map(r => 
+          `${r.date.toISOString()},${r.pressure.toFixed(2)}`
+        ).join('\n');
+        content = headers + rows;
+        filename = 'lpg-readings.csv';
+        mimeType = 'text/csv';
+      } else {
+        content = JSON.stringify(appState.readings.map(r => ({
+          date: r.date.toISOString(),
+          pressure: r.pressure
+        })), null, 2);
+        filename = 'lpg-readings.json';
+        mimeType = 'application/json';
+      }
+      
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Clear History
+    function clearHistory() {
+      if (appState.readings.length === 0) {
+        alert('No readings to clear.');
+        return;
+      }
+      
+      if (!confirm(`Are you sure you want to delete all ${appState.readings.length} readings? This action cannot be undone.`)) {
+        return;
+      }
+      
+      appState.readings = [];
+      
+      // Clear on server
+      try {
+        fetch('/api/readings', { method: 'DELETE' }).catch(error => 
+          console.error('Failed to clear readings on server:', error)
+        );
+      } catch (error) {
+        console.error('Failed to clear readings:', error);
+      }
+      
+      renderHistory();
       updateGaugeDisplay();
       generatePressureChart();
       updateLastReadingDisplay();
