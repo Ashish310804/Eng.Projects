@@ -201,8 +201,9 @@
     }
 
     .metric-value {
-      font-size: 17px;
+      font-size: 20px;
       margin-top: 5px;
+      font-weight: bold;
     }
 
     .safety-grid,
@@ -246,6 +247,31 @@
       border-right: 1px solid #ddd;
       border-bottom: 1px solid #ddd;
       transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .metric-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #eee;
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #2c9b65;
+      border-radius: 3px;
+      transition: width 0.5s ease;
     }
 
     .metric-card:hover {
@@ -797,6 +823,14 @@
       color: #aaa;
     }
 
+    body.dark-mode .progress-bar {
+      background: #333;
+    }
+
+    body.dark-mode .progress-fill {
+      background: #2c9b65;
+    }
+
     body.dark-mode .alert-card {
       background: #2a2a2a;
       border-color: #333;
@@ -1026,10 +1060,10 @@
     <section>
       <div class="section-title">Key metrics <span>4 entries</span></div>
       <div class="metrics-grid">
-        <div class="metric-card"><div class="metric-label">Usage rate</div><div class="metric-value">—</div><small>kg/day</small></div>
-        <div class="metric-card"><div class="metric-label">Gas left</div><div class="metric-value">14.20</div><small>of 14.2 kg</small></div>
-        <div class="metric-card"><div class="metric-label">Recent drop</div><div class="metric-value">0.00</div><small>bar in 30 min</small></div>
-        <div class="metric-card"><div class="metric-label">Avg pressure</div><div class="metric-value">13.25</div><small>bar · 4 logs</small></div>
+        <div class="metric-card"><span class="metric-icon">📈</span><div class="metric-label">Usage rate</div><div class="metric-value">—</div><small>kg/day</small></div>
+        <div class="metric-card"><span class="metric-icon">⛽</span><div class="metric-label">Gas left</div><div class="metric-value">14.20</div><small>of 14.2 kg</small><div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div></div>
+        <div class="metric-card"><span class="metric-icon">📉</span><div class="metric-label">Recent drop</div><div class="metric-value">0.00</div><small>bar in 30 min</small></div>
+        <div class="metric-card"><span class="metric-icon">📊</span><div class="metric-label">Avg pressure</div><div class="metric-value">13.25</div><small>bar · 4 logs</small></div>
       </div>
     </section>
 
