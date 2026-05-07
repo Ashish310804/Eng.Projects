@@ -1000,6 +1000,263 @@
         padding: 20px;
       }
     }
+
+    /* Chatbox Styles */
+    .chatbox-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 360px;
+      height: 500px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.8) translateY(20px);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 998;
+    }
+
+    .chatbox-container.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+    }
+
+    body.dark-mode .chatbox-container {
+      background: #222;
+      color: #e0e0e0;
+    }
+
+    .chatbox-header {
+      background: linear-gradient(135deg, #ef2b2b, #c41616);
+      color: white;
+      padding: 16px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(239, 43, 43, 0.2);
+    }
+
+    .chatbox-header h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .chatbox-close {
+      cursor: pointer;
+      font-size: 20px;
+      background: none;
+      border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s ease;
+    }
+
+    .chatbox-close:hover {
+      transform: scale(1.2) rotate(90deg);
+    }
+
+    .chatbox-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #fafafa;
+    }
+
+    body.dark-mode .chatbox-messages {
+      background: #1a1a1a;
+    }
+
+    .chatbox-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chatbox-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chatbox-messages::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 3px;
+    }
+
+    .chatbox-messages::-webkit-scrollbar-thumb:hover {
+      background: #999;
+    }
+
+    .chat-message {
+      display: flex;
+      gap: 8px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-message.user {
+      justify-content: flex-end;
+    }
+
+    .chat-bubble {
+      max-width: 70%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    .chat-message.bot .chat-bubble {
+      background: #e0e0e0;
+      color: #222;
+      border-radius: 10px 10px 10px 0;
+    }
+
+    body.dark-mode .chat-message.bot .chat-bubble {
+      background: #333;
+      color: #e0e0e0;
+    }
+
+    .chat-message.user .chat-bubble {
+      background: #ef2b2b;
+      color: white;
+      border-radius: 10px 10px 0 10px;
+    }
+
+    .chatbox-input-area {
+      padding: 12px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 8px;
+      background: white;
+      border-radius: 0 0 12px 12px;
+    }
+
+    body.dark-mode .chatbox-input-area {
+      background: #222;
+      border-color: #333;
+    }
+
+    .chatbox-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 13px;
+      resize: none;
+      font-family: Inter, Arial, sans-serif;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    body.dark-mode .chatbox-input {
+      background: #333;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    .chatbox-input:focus {
+      outline: none;
+      border-color: #ef2b2b;
+      box-shadow: 0 0 0 2px rgba(239, 43, 43, 0.1);
+    }
+
+    .chatbox-send-btn {
+      padding: 10px 12px;
+      background: #ef2b2b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chatbox-send-btn:hover {
+      background: #d62a2a;
+      transform: translateY(-1px);
+    }
+
+    .chatbox-send-btn:active {
+      transform: translateY(0);
+    }
+
+    .chatbox-toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef2b2b, #c41616);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(239, 43, 43, 0.3);
+      transition: all 0.3s ease;
+      z-index: 997;
+    }
+
+    .chatbox-toggle-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 24px rgba(239, 43, 43, 0.4);
+    }
+
+    .chatbox-toggle-btn:active {
+      transform: scale(0.95);
+    }
+
+    .chatbox-toggle-btn.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0);
+    }
+
+    @media (max-width: 520px) {
+      .chatbox-container {
+        width: calc(100vw - 24px);
+        height: 60vh;
+        bottom: 12px;
+        right: 12px;
+        max-height: 500px;
+      }
+
+      .chatbox-toggle-btn {
+        bottom: 12px;
+        right: 12px;
+      }
+
+      .chat-bubble {
+        max-width: 85%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1292,6 +1549,25 @@
       <div class="modal-buttons">
         <button class="modal-btn modal-btn-primary" onclick="closeModal('aboutModal')">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Chatbox -->
+  <button class="chatbox-toggle-btn" id="chatboxToggleBtn" onclick="toggleChatbox()" title="Open chat">💬</button>
+  
+  <div class="chatbox-container" id="chatboxContainer">
+    <div class="chatbox-header">
+      <h3>Support Chat</h3>
+      <button class="chatbox-close" onclick="toggleChatbox()">×</button>
+    </div>
+    <div class="chatbox-messages" id="chatboxMessages">
+      <div class="chat-message bot">
+        <div class="chat-bubble">Hi there! 👋 I'm here to help with your Saathi cylinder tracker. What can I assist you with?</div>
+      </div>
+    </div>
+    <div class="chatbox-input-area">
+      <input type="text" class="chatbox-input" id="chatboxInput" placeholder="Type your message..." onkeypress="handleChatKeypress(event)" />
+      <button class="chatbox-send-btn" onclick="sendChatMessage()" title="Send">➤</button>
     </div>
   </div>
 
@@ -2269,6 +2545,90 @@
           updateLastReadingDisplay();
         };
       });
+    }
+
+    // Chatbox Functions
+    function toggleChatbox() {
+      const chatbox = document.getElementById('chatboxContainer');
+      const toggleBtn = document.getElementById('chatboxToggleBtn');
+      
+      chatbox.classList.toggle('active');
+      toggleBtn.classList.toggle('hidden');
+      
+      if (chatbox.classList.contains('active')) {
+        document.getElementById('chatboxInput').focus();
+      }
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatboxInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message
+      addChatMessage(message, 'user');
+      input.value = '';
+      
+      // Simulate bot response after a delay
+      setTimeout(() => {
+        const botResponse = generateBotResponse(message);
+        addChatMessage(botResponse, 'bot');
+      }, 500);
+    }
+
+    function addChatMessage(message, sender) {
+      const messagesContainer = document.getElementById('chatboxMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message ${sender}`;
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble';
+      bubble.textContent = message;
+      
+      messageDiv.appendChild(bubble);
+      messagesContainer.appendChild(messageDiv);
+      
+      // Auto-scroll to bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function handleChatKeypress(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage();
+      }
+    }
+
+    function generateBotResponse(userMessage) {
+      const lowerMessage = userMessage.toLowerCase();
+      
+      // Simple keyword-based responses
+      if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+        return 'Hey! How can I help you today with your cylinder tracking? 😊';
+      } else if (lowerMessage.includes('pressure') || lowerMessage.includes('reading')) {
+        return 'You can add new pressure readings using the "Add a reading" section. Just enter the bar value and timestamp, then click "Save reading".';
+      } else if (lowerMessage.includes('leak')) {
+        return 'Leak detection monitors pressure drops. If there\'s a sudden pressure loss, you\'ll see a leak alert in the Forecast & safety section.';
+      } else if (lowerMessage.includes('forecast') || lowerMessage.includes('end date')) {
+        return 'The system forecasts when your cylinder will run out based on pressure trends. You need at least 2 readings for an accurate forecast.';
+      } else if (lowerMessage.includes('history') || lowerMessage.includes('export')) {
+        return 'You can export your readings as CSV or JSON using the export button in the History section. You can also sort by date or pressure!';
+      } else if (lowerMessage.includes('settings')) {
+        return 'Settings let you customize notifications, auto-sync, refill reminders, and leak/pressure alert thresholds.';
+      } else if (lowerMessage.includes('dark mode')) {
+        return 'Dark mode is available in the menu! It reduces eye strain in low-light environments.';
+      } else if (lowerMessage.includes('thank')) {
+        return 'You\'re welcome! Let me know if you need any other help. 🙌';
+      } else {
+        const responses = [
+          'I\'m not sure about that, but I can help with pressure readings, leak detection, forecasting, and more! What would you like to know?',
+          'Can you be more specific? Ask me about readings, leaks, forecasts, or settings!',
+          'That\'s a great question! Try asking about features like adding readings, viewing history, or exporting data.',
+          'I\'m here to help! Try asking about how to use different features of Saathi.'
+        ];
+        return responses[Math.floor(Math.random() * responses.length)];
+      }
     }
 
     // Start the app
